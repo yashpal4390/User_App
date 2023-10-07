@@ -1,4 +1,5 @@
-import 'dart:ffi';
+// ignore_for_file: prefer_const_constructors, avoid_print
+
 import 'dart:io';
 
 import 'package:demo/const.dart';
@@ -208,6 +209,32 @@ class _CreateUserState extends State<CreateUser> {
                     Row(
                       children: [
                         Icon(
+                          Icons.star_rate,
+                        color: Colors.grey,),
+                        SizedBox(width: 15),
+                        Expanded(child: TextFormField(
+                          validator: (value) {
+                            if (value?.isEmpty ?? false) {
+                              return "Enter Rating";
+                            } else if(int.tryParse(value!) !>= 5){
+                              return "Enter Rating Between 1 to 5";
+                            }
+                            else {
+                              return null;
+                            }
+                          },
+                          keyboardType: TextInputType.number,
+                          controller: ratingController,
+                          decoration: InputDecoration(
+                            hintText: "Enter Ratting Between 1 to 5",
+                            hintStyle: TextStyle(color: Colors.grey),
+                          ),
+                        ),),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Icon(
                           Icons.mail,
                           color: Colors.grey,
                         ),
@@ -343,24 +370,6 @@ class _CreateUserState extends State<CreateUser> {
                                   hintStyle: TextStyle(color: Colors.grey),
                                 ),
                               ),
-                              TextFormField(
-                                validator: (value) {
-                                  if (value?.isEmpty ?? false) {
-                                    return "Enter Rating";
-                                  } else if(int.tryParse(value!) !>= 5){
-                                    return "Enter Rating Between 1 to 5";
-                                  }
-                                  else {
-                                    return null;
-                                  }
-                                },
-                                keyboardType: TextInputType.number,
-                                controller: ratingController,
-                                decoration: InputDecoration(
-                                  hintText: "Ratting",
-                                  hintStyle: TextStyle(color: Colors.grey),
-                                ),
-                                ),
                             ],
                           ),
                         ),
@@ -373,6 +382,9 @@ class _CreateUserState extends State<CreateUser> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStatePropertyAll(Colors.redAccent),
+                            ),
                             onPressed: () {
                               if (formKey.currentState?.validate() ?? false) {
                                 FocusScope.of(context).unfocus(); // For keyboard Close
@@ -398,6 +410,9 @@ class _CreateUserState extends State<CreateUser> {
                           width: 15,
                         ),
                         ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStatePropertyAll(Colors.redAccent),
+                          ),
                             onPressed: () {
                               print("Reset");
                               fnameController.clear();

@@ -32,6 +32,8 @@ class UserListScreen extends StatefulWidget {
 
 class _UserListScreenState extends State<UserListScreen> {
   TextEditingController searchController = TextEditingController();
+  Color? fav=Colors.grey;
+  Icon favicon=Icon(Icons.favorite_border_outlined);
   void _deleteUser(int index) {
     setState(() {
       userList.removeAt(index);
@@ -177,7 +179,8 @@ class _UserListScreenState extends State<UserListScreen> {
                         onTap: (){
                           favuserList.add(userList[index]);
                         },
-                          child: Icon(Icons.favorite,size: 40)),
+                          child: favicon,
+                      ),
                     ],
                   ),
                 ],
