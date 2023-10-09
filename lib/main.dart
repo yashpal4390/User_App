@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, iterable_contains_unrelated_type, avoid_print, use_key_in_widget_constructors, library_private_types_in_public_api
 
 import 'dart:io';
 
@@ -12,17 +12,15 @@ import 'create_user.dart';
 import 'splash_screen.dart';
 import 'util.dart';
 
-
-
 void main() => runApp(MaterialApp(
-  debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,
       home: SplashScreen(),
-  routes:{
-    splash: (context) => SplashScreen(),
-    home_page: (context) =>UserListScreen(),
-    create: (context) => CreateUser(),
-    fav_page: (context) => FavoriteUser(),
-  },
+      routes: {
+        splash: (context) => SplashScreen(),
+        home_page: (context) => UserListScreen(),
+        create: (context) => CreateUser(),
+        fav_page: (context) => FavoriteUser(),
+      },
     ));
 
 class UserListScreen extends StatefulWidget {
@@ -32,13 +30,13 @@ class UserListScreen extends StatefulWidget {
 
 class _UserListScreenState extends State<UserListScreen> {
   TextEditingController searchController = TextEditingController();
-  Color? fav=Colors.grey;
-  Icon favicon=Icon(Icons.favorite_border_outlined);
+  String searchName = 'Bob';
   void _deleteUser(int index) {
     setState(() {
       userList.removeAt(index);
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,47 +47,51 @@ class _UserListScreenState extends State<UserListScreen> {
         shadowColor: Colors.white,
         leading: SizedBox(height: 2),
         actions: [
-          IconButton(onPressed: (){
-            Navigator.pushNamed(context, fav_page);
-          }, icon: Icon(Icons.favorite_border)),
-          IconButton(onPressed: (){
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: Text('Search User'),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TextFormField(
-                        controller: searchController,
-                        decoration: InputDecoration(labelText: 'Enter User Name'),
+          IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, fav_page);
+              },
+              icon: Icon(Icons.favorite_border)),
+          IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text('Search User'),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextFormField(
+                            controller: searchController,
+                            decoration:
+                                InputDecoration(labelText: 'Enter User Name'),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  actions: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: InkWell(
-                          child: Text('Search'),
-                        onTap: (){
-                            if(userList.contains(userList.contains(searchController)))
-                            {
-                              print("Get");
-                            }
-                            else{
+                      actions: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: InkWell(
+                            child: Text('Search'),
+                            onTap: () {
+                              searchName=searchController.text;
+                              if (userList.contains(searchName)){
+                                print("Get");
+                              } else {
                                 print("Not Get");
-                            }
-                        },
-                      ),
-                    ),
-                  ],
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 );
               },
-            );
-          }, icon: Icon(Icons.search_sharp)),
+              icon: Icon(Icons.search_sharp)),
         ],
       ),
       resizeToAvoidBottomInset: false,
@@ -106,53 +108,75 @@ class _UserListScreenState extends State<UserListScreen> {
                     radius: 55,
                     backgroundColor: Colors.grey,
                     foregroundColor: Colors.black,
-                    backgroundImage: xFile != null
+                    backgroundImage: user.xFile != null
                         ? FileImage(
-                      File(xFile?.path ?? ""),
-                    )
+                            File(user.xFile?.path ?? ""),
+                          )
                         : null,
                   ),
                   SizedBox(height: 20),
                   Row(
                     children: [
                       Text("Name :~   ",
-                    style: fonts[index].copyWith(fontWeight: FontWeight.bold)),
-                      Text(user.fname,style: fonts[index]),
+                          style: fonts[index]
+                              .copyWith(fontWeight: FontWeight.bold)),
+                      Text(user.fname,
+                          style: fonts[index]
+                              .copyWith(fontWeight: FontWeight.bold)),
                       SizedBox(width: 3),
-                      Text(user.lname,style: fonts[index]),
+                      Text(user.lname,
+                          style: fonts[index]
+                              .copyWith(fontWeight: FontWeight.bold)),
                     ],
                   ),
+                  SizedBox(height: 4),
                 ],
               ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
+                  Row(
+                    children: [
+                      Text("Gender :~   ",
+                          style: fonts[index]
+                              .copyWith(fontWeight: FontWeight.bold)),
+                      Text(user.gender, style: fonts[index]),
+                      SizedBox(width: 3),
+                    ],
+                  ),
+                  SizedBox(height: 4),
                   Row(
                     children: [
                       Text("E-Mail :~     ",
-                          style: fonts[index].copyWith(fontWeight: FontWeight.bold)),
-                      Text(user.email,style: fonts[index]),
+                          style: fonts[index]
+                              .copyWith(fontWeight: FontWeight.bold)),
+                      Text(user.email, style: fonts[index]),
                     ],
                   ),
+                  SizedBox(height: 4),
                   Row(
                     children: [
-                      Text("Mo No :~     ",
-                          style: fonts[index].copyWith(fontWeight: FontWeight.bold)),
-                      Text(user.phone,style: fonts[index]),
+                      Text("Mo. No :~    ",
+                          style: fonts[index]
+                              .copyWith(fontWeight: FontWeight.bold)),
+                      Text(user.phone, style: fonts[index]),
                     ],
                   ),
+                  SizedBox(height: 4),
                   Row(
                     children: [
                       Text("City :~           ",
-                          style: fonts[index].copyWith(fontWeight: FontWeight.bold)),
-                      Text(user.address,style: fonts[index]),
+                          style: fonts[index]
+                              .copyWith(fontWeight: FontWeight.bold)),
+                      Text(user.address, style: fonts[index]),
                     ],
                   ),
+                  SizedBox(height: 4),
                   Row(
                     children: [
                       Text("Rating :~     ",
-                          style: fonts[index].copyWith(fontWeight: FontWeight.bold)),
+                          style: fonts[index]
+                              .copyWith(fontWeight: FontWeight.bold)),
                       RatingBarIndicator(
                         rating: double.parse(user.rat as String),
                         itemBuilder: (context, index) => Icon(
@@ -170,39 +194,51 @@ class _UserListScreenState extends State<UserListScreen> {
                     children: [
                       SizedBox(width: 180),
                       InkWell(
-                        onTap: (){
-                          Share.share(user.fname ?? "");
-                        },
+                          onTap: () {
+                            // ignore: dead_null_aware_expression
+                            Share.share(user.fname ?? "");
+                          },
                           child: Icon(Icons.share)),
                       SizedBox(width: 20),
                       InkWell(
-                        onTap: (){
+                        onTap: () {
+                          if(fav)
                           favuserList.add(userList[index]);
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(SnackBar(
+                            content: Text("Added to the Favorite"),
+                            duration: Duration(seconds: 6),
+                            backgroundColor: Colors.red,
+                          ));
                         },
-                          child: favicon,
+                        child: Icon(Icons.favorite),
                       ),
                     ],
                   ),
                 ],
               ),
               trailing: IconButton(
-                icon: Icon(Icons.delete,size: 40),
+                icon: Icon(Icons.delete, size: 40),
                 onPressed: () {
                   showDialog(
                     context: context,
                     builder: (context) {
                       return AlertDialog(
                         title: Text('Add User'),
-                        content: const Text("Are You Sure Want To Delete This User?"),
+                        content: const Text(
+                            "Are You Sure Want To Delete This User?"),
                         actions: <Widget>[
-                          TextButton(onPressed: (){
-                            Navigator.of(context).pop(false);
-                          }, child: const Text("No")
-                          ),
-                          TextButton(onPressed: (){
-                            _deleteUser(index);
-                            Navigator.pop(context);
-                          }, child: const Text("Yes"),
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(false);
+                              },
+                              child: const Text("No")),
+                          TextButton(
+                            onPressed: () {
+                              _deleteUser(index);
+                              Navigator.pop(context);
+                            },
+                            child: const Text("Yes"),
                           ),
                         ],
                       );

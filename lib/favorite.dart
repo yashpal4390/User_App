@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:io';
 
 import 'package:demo/util.dart';
@@ -39,9 +41,9 @@ class _FavoriteUserState extends State<FavoriteUser> {
                     radius: 55,
                     backgroundColor: Colors.grey,
                     foregroundColor: Colors.black,
-                    backgroundImage: xFile != null
+                    backgroundImage: user.xFile != null
                         ? FileImage(
-                      File(xFile?.path ?? ""),
+                      File(user.xFile?.path ?? ""),
                     )
                         : null,
                   ),
@@ -50,17 +52,26 @@ class _FavoriteUserState extends State<FavoriteUser> {
                     children: [
                       Text("Name :~   ",
                           style: fonts[index].copyWith(fontWeight: FontWeight.bold)),
-                      Text(user.fname,style: fonts[index]),
+                      Text(user.fname,style: fonts[index].copyWith(fontWeight: FontWeight.bold)),
                       SizedBox(width: 3),
-                      Text(user.lname,style: fonts[index]),
+                      Text(user.lname,style: fonts[index].copyWith(fontWeight: FontWeight.bold)),
                     ],
                   ),
+                  SizedBox(height: 4),
                 ],
               ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
+                  Row(
+                    children: [
+                      Text("Gender :~   ",
+                          style: fonts[index].copyWith(fontWeight: FontWeight.bold)),
+                      Text(user.gender,style: fonts[index]),
+                      SizedBox(width: 3),
+                    ],
+                  ),
+                  SizedBox(height: 4),
                   Row(
                     children: [
                       Text("E-Mail :~     ",
@@ -68,6 +79,7 @@ class _FavoriteUserState extends State<FavoriteUser> {
                       Text(user.email,style: fonts[index]),
                     ],
                   ),
+                  SizedBox(height: 4),
                   Row(
                     children: [
                       Text("Mo No :~     ",
@@ -75,6 +87,7 @@ class _FavoriteUserState extends State<FavoriteUser> {
                       Text(user.phone,style: fonts[index]),
                     ],
                   ),
+                  SizedBox(height: 4),
                   Row(
                     children: [
                       Text("City :~           ",
@@ -82,6 +95,7 @@ class _FavoriteUserState extends State<FavoriteUser> {
                       Text(user.address,style: fonts[index]),
                     ],
                   ),
+                  SizedBox(height: 4),
                   Row(
                     children: [
                       Text("Rating :~     ",

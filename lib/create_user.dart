@@ -27,7 +27,11 @@ class _CreateUserState extends State<CreateUser> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   final ImagePicker picker = ImagePicker();
-  MaritalStatus? selectedMaritalStatus;
+  Gender? selectedGender;
+
+  XFile? xFile1;
+
+  String gender="";
 
 
   void _addUser() {
@@ -37,10 +41,14 @@ class _CreateUserState extends State<CreateUser> {
     final String phone = phoneController.text;
     final String address = addressController.text;
     final String rating = ratingController.text;
+    final String Gender_1=gender!;
+    final XFile xfile = xFile1!;
 
     if (fname.isNotEmpty &&
         lname.isNotEmpty &&
         email.isNotEmpty &&
+        address.isNotEmpty &&
+        rating.isNotEmpty &&
         phone.isNotEmpty) {
       setState(() {
         userList.add(User(
@@ -49,7 +57,9 @@ class _CreateUserState extends State<CreateUser> {
             email: email,
             phone: phone,
             rat: rating,
-            address: address));
+            address: address,
+            xFile: xfile,
+            gender: Gender_1));
       });
 
       fnameController.clear();
@@ -101,9 +111,9 @@ class _CreateUserState extends State<CreateUser> {
                             radius: 55,
                             backgroundColor: Colors.grey,
                             foregroundColor: Colors.black,
-                            backgroundImage: xFile != null
+                            backgroundImage: xFile1 != null
                                 ? FileImage(
-                              File(xFile?.path ?? ""),
+                              File(xFile1?.path ?? ""),
                             )
                                 : null,
                             child: Text("Add"),
@@ -114,8 +124,7 @@ class _CreateUserState extends State<CreateUser> {
                             left: 80,
                             child: IconButton(
                                 onPressed: () async {
-                                  // XFile? file = await picker.pickImage(source: ImageSource.gallery);
-                                  xFile = await picker.pickImage(
+                                  xFile1 = await picker.pickImage(
                                       source: ImageSource.camera);
 
                                   setState(() {});
@@ -130,12 +139,12 @@ class _CreateUserState extends State<CreateUser> {
                                   picker
                                       .pickImage(source: ImageSource.gallery)
                                       .then((value) {
-                                    xFile = value;
+                                    xFile1 = value;
                                     setState(() {});
                                   });
                                 },
                                 icon: Icon(Icons.photo)),
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -216,7 +225,7 @@ class _CreateUserState extends State<CreateUser> {
                           validator: (value) {
                             if (value?.isEmpty ?? false) {
                               return "Enter Rating";
-                            } else if(int.tryParse(value!) !>= 5){
+                            } else if(int.tryParse(value!) !>6){
                               return "Enter Rating Between 1 to 5";
                             }
                             else {
@@ -266,36 +275,40 @@ class _CreateUserState extends State<CreateUser> {
                           color: Colors.grey,
                         ),
                         Radio(
-                          value: MaritalStatus.single,
-                          groupValue: selectedMaritalStatus,
+                          value: Gender.male,
+                          groupValue: selectedGender,
                           materialTapTargetSize:
                           MaterialTapTargetSize.shrinkWrap,
                           onChanged: (value) {
-                            selectedMaritalStatus = value;
+                            selectedGender = value;
+                            print(value);
+                            gender="Male";
+                            print(gender);
                             setState(() {});
-                            print("value $value");
                           },
                         ),
                         InkWell(
                           onTap: () {
-                            selectedMaritalStatus = MaritalStatus.single;
+                            selectedGender = Gender.male;
                             setState(() {});
                           },
                           child: Text("Male",style: TextStyle(color: Colors.grey)),
                         ),
                         Radio(
-                          value: MaritalStatus.married,
-                          groupValue: selectedMaritalStatus,
+                          value: Gender.female,
+                          groupValue: selectedGender,
                           materialTapTargetSize:
                           MaterialTapTargetSize.shrinkWrap,
                           onChanged: (value) {
-                            selectedMaritalStatus = value;
+                            selectedGender = value;
+                            gender="female";
+                            print(value);
                             setState(() {});
                           },
                         ),
                         InkWell(
                           onTap: () {
-                            selectedMaritalStatus = MaritalStatus.married;
+                            selectedGender = Gender.female;
                             setState(() {});
                           },
                           child: Text("Female",style: TextStyle(color: Colors.grey)),
@@ -389,17 +402,31 @@ class _CreateUserState extends State<CreateUser> {
                               if (formKey.currentState?.validate() ?? false) {
                                 FocusScope.of(context).unfocus(); // For keyboard Close
                                 formKey.currentState?.save();
-
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
-                                  content: Text("User Created Successfully"),
-                                  duration: Duration(seconds: 6),
-                                  backgroundColor: Colors.red,
-                                  action: SnackBarAction(
-                                    label: "Success",
-                                    onPressed: () {},
-                                  ),
-                                ));
+                                if(xFile1!=null){
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text("User Created Successfully"),
+                                    duration: Duration(seconds: 6),
+                                    backgroundColor: Colors.red,
+                                    action: SnackBarAction(
+                                      label: "Success",
+                                      onPressed: () {},
+                                    ),
+                                  ));
+                                }
+                                else if(xFile1==null)
+                                  {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content: Text("Select Any Profile Picture!!"),
+                                      duration: Duration(seconds: 3),
+                                      backgroundColor: Colors.red,
+                                      action: SnackBarAction(
+                                        label: "Warning",
+                                        onPressed: () {},
+                                      ),
+                                    ));
+                                  }
                                 _addUser();
                               } else {
                                 print("Invalid");
@@ -421,6 +448,8 @@ class _CreateUserState extends State<CreateUser> {
                               phoneController.text = "";
                               addressController.text = "";
                               formKey.currentState?.reset();
+                              xFile1=null;
+                              print(selectedGender);
                               FocusScope.of(context)
                                   .unfocus(); // For keyboard Close
                             },
@@ -439,4 +468,4 @@ class _CreateUserState extends State<CreateUser> {
 }
 
 
-enum MaritalStatus { single, married }
+enum Gender { male, female }

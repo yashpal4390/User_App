@@ -11,18 +11,23 @@ class User {
   String phone;
   String address;
   String? rat;
-  User(
-      {required this.fname,
-        required this.lname,
-        required this.address,
-        required this.email,
-        required this.phone,
-        required this.rat,
-      });
+  String gender;
+  XFile? xFile;
+  User({
+    required this.fname,
+    required this.lname,
+    required this.address,
+    required this.email,
+    required this.phone,
+    required this.rat,
+    required this.xFile,
+    required this.gender,
+  });
 }
 
 List<User> userList = [];
 List<User> favuserList = [];
+List<User> searchList = [];
 
 
 List<TextStyle> fonts = [
@@ -33,4 +38,4 @@ List<TextStyle> fonts = [
   GoogleFonts.moul(),
 ];
 
-XFile? xFile;
+
